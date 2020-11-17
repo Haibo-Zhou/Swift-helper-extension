@@ -7,6 +7,11 @@
 
 import Foundation
 
+// load file from bundle json file and decode it to a generic type.
+// one line examples:
+//  1) let user = Bundle.main.decode(User.self, from: "data.json")
+//  2) let menuItems = Bundle.main.decode([MenuItem].self, from: "menu.json")
+
 extension Bundle {
     func decode<T: Decodable>(_ type: T.Type, from file: String, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate, keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .convertFromSnakeCase) -> T {
         // get file url
@@ -17,11 +22,11 @@ extension Bundle {
         guard let data = try? Data(contentsOf: url) else {
             fatalError("Failed to load \(file) from bundle")
         }
-        
+
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = dateDecodingStrategy
         decoder.keyDecodingStrategy = keyDecodingStrategy
-        
+
         do {
             return try decoder.decode(T.self, from: data)
         } catch DecodingError.keyNotFound(let key, let context) {
